@@ -55,7 +55,7 @@ strip_local_sources() {
 
 printf '\n🐳 Created isolated docker Python environment for pip-audit\n\n'
 
-DEPENDENCY_GROUPS=""
+DEPENDENCY_GROUPS=()
 if [[ -r /workspace/pyproject.toml ]]; then
   REQUIREMENTS="pyproject.toml"
 
