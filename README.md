@@ -54,6 +54,29 @@ When a `pyproject.toml` file is detected:
 - If a Python version is specified in your `pyproject.toml` (e.g., `requires-python`), uv will enforce that version
 - If no Python version is specified, the distro-included Python from the base image is used
 
+#### Dependency Groups
+
+You can include additional [dependency groups](https://docs.astral.sh/uv/concepts/projects/dependencies/#dependency-groups) in the audit by passing group names as arguments:
+
+```bash
+pip-audit dev test
+```
+
+This passes `--group dev --group test` to `uv pip compile`, including those dependency groups alongside the main project dependencies. This is useful for auditing development dependencies, test dependencies, or any other groups defined in your `pyproject.toml`.
+
+Example `pyproject.toml` with dependency groups:
+
+```toml
+[project]
+dependencies = ["requests>=2.28"]
+
+[dependency-groups]
+dev = ["pytest", "black"]
+test = ["coverage", "pytest-cov"]
+```
+
+Running `pip-audit dev test` will audit `requests`, `pytest`, `black`, `coverage`, and `pytest-cov`.
+
 ## Example Output
 
 ```
