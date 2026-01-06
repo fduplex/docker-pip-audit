@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
+
 # Strip [tool.uv.sources] section and remove those packages from dependencies.
 # Local filesystem paths won't exist in container, and private packages won't resolve.
 # Args: $1 = path to pyproject.toml
@@ -54,8 +55,12 @@ strip_local_sources() {
 
 printf '\n🐳 Created isolated docker Python environment for pip-audit\n\n'
 
+DEPENDENCY_GROUPS=""
 if [[ -r /workspace/pyproject.toml ]]; then
   REQUIREMENTS="pyproject.toml"
+
+  if [[ $# -ge 1 ]]; then DEPENDENCY_GROUPS=("$@"); fi
+
 elif [[ -r /workspace/requirements.txt ]]; then
   REQUIREMENTS="requirements.txt"
 else
@@ -76,7 +81,7 @@ if [[ $REQUIREMENTS == "pyproject.toml" ]]; then
   strip_local_sources pyproject.toml
 
   printf -- '  - Compiling requirements.txt from pyproject.toml ... '
-  uv pip compile -o requirements.txt pyproject.toml --quiet
+  uv pip compile ${DEPENDENCY_GROUPS[@]/#/--group } --all-extras -o requirements.txt pyproject.toml --quiet
   rm pyproject.toml
   printf "done!\n"
 fi
