@@ -1,0 +1,9 @@
+# docker-pip-audit pinned upstream versions.
+# Sourced by pip-audit.sh and passed to the Dockerfile as build args.
+# Bash-sourceable: no spaces around `=`. Edit, then `pip-audit build`.
+
+# uv: `latest` or an explicit version (e.g. 0.7.5).
+# `pip-audit update` rebuilds when set to `latest`; refuses on an explicit pin.
+UV_VERSION=latest
+
+IMAGE_NAME=docker-pip-audit
